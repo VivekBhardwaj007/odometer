@@ -7,7 +7,7 @@
     1. Automatically Generate random Number and Show on Svcreen
     2. Show number when func will get from you.
 */
-var customOdometer = (function({selected_odometer, number_generation_duration, animation_time, initial_number, last_number, single_counter_number, include_initial_count, include_last_count, seperator, seperator_position, custom_id}) {
+var customOdometer = (function({selected_odometer, number_generation_duration, animation_time, initial_number, last_number, single_counter_number, include_initial_count, include_last_count, seperator, seperator_position, custom_id, checkViewport}) {
   let generated_numbers = [],
   initial_count = +initial_number || 0,
   last_count = +last_number || 0,
@@ -20,7 +20,8 @@ var customOdometer = (function({selected_odometer, number_generation_duration, a
       'last': include_last_count || false
   },
   seperator_sign = seperator || ',',
-  seperator_position_number = seperator_position || {};
+  seperator_position_number = seperator_position || {},
+  checkIsInViewport = checkViewport || false;
 
 
   // START : Throw Any Error
@@ -94,7 +95,7 @@ var customOdometer = (function({selected_odometer, number_generation_duration, a
   
   // START : To show value of odometer on Screen
   function showCounterValue(value, key){
-    let isInViewport = selected_odometer == 'single' ? isElementInViewport() : true;
+    let isInViewport = selected_odometer == 'single' && checkIsInViewport ? isElementInViewport() : true;
     if(isInViewport){
       // Getting Client Height of counter number
       var clientHeight = document.querySelector(`#${custom_id} #counter-number-${key}`).clientHeight;
@@ -213,7 +214,7 @@ var customOdometer = (function({selected_odometer, number_generation_duration, a
   // START : Scroll Event Listner
   window.addEventListener('scroll', function () {
     // Checking Element is in Viewport or not
-    if (isElementInViewport() && selected_odometer == 'single') {
+    if (selected_odometer == 'single' && checkIsInViewport && isElementInViewport()) {
       // SHowing Number's
       loopForNumber();
     }
